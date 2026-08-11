@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
-import bg from "./assets/13987.jpg";
-import whiteBg from "./assets/white.jpg";
+import bg from "../public/dark.jpg";
+import whiteBg from "../public/white.jpg";
 import React from "react";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
