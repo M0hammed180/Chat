@@ -24,26 +24,22 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://chat-six-mu-81.vercel.app",
   "https://chat-git-main-m0hammed180s-projects.vercel.app",
-  "https://chat-m71c50blp-m0hammed180s-projects.vercel.app/login",
+  "https://chat-m71c50blp-m0hammed180s-projects.vercel.app",
+  "https://chat-4dx5u6s82-m0hammed180s-projects.vercel.app",
 ];
-app.use(
-  cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    credentials: true,
-  }),
-);
+
+// 1. تمرير الروابط المسموحة للـ CORS الخاص بـ Express
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/user", userRoutes);
 app.use("/chats", chatsRoutes);
-
-// global middleware for not found router
-// app.all('*', (req, res, next)=> {
-//     return res.status(404).json({ status: httpStatusText.ERROR, message: 'this resource is not available'})
-// })
 
 // global error handler
 app.use((error, req, res, next) => {
@@ -57,10 +53,13 @@ app.use((error, req, res, next) => {
 
 // HTTP Server & Socket.IO
 const server = http.createServer(app);
+
+// 2. تمرير نفس الروابط للـ CORS الخاص بـ Socket.io
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
   },
 });
 
@@ -78,9 +77,7 @@ io.on("connection", (socket) => {
   // Message events
   socket.on("send_message", (data) => messages.sendMessage(socket, io, data));
   socket.on("edit_message", (data) => messages.editMessage(socket, io, data));
-  socket.on("delete_message", (data) =>
-    messages.deleteMessage(socket, io, data),
-  );
+  socket.on("delete_message", (data) => messages.deleteMessage(socket, io, data));
   socket.on("read-messages", (data) => messages.readMessage(socket, io, data));
 
   // Chat events
@@ -88,6 +85,8 @@ io.on("connection", (socket) => {
   socket.on("unblock", (data) => chats.unblock(socket, io, data));
 });
 
-server.listen(process.env.port, () => {
-  console.log(`Listening on port ${process.env.port}`);
+// 3. تعديل الـ PORT وتوفير بورت بديل للاختبار المحلي
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
