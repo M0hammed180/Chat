@@ -5,6 +5,7 @@ import { setUserData } from "../../Redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Loading from "../Elements/Loading";
+import { socket, ensureSocketConnected } from "../socket";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -27,13 +28,18 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://chat-production-67d2.up.railway.app/user/login", {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        "https://chat-production-67d2.up.railway.app/user/login",
+        {
+          email: email,
+          password: password,
+        },
+      );
 
       localStorage.setItem("token", response.data.token);
       dispatch(setUserData(response.data.userData));
+      ensureSocketConnected();
+      socket.emit("add-user", response.data.userData._id);
       navigate("/");
     } catch (error) {
       if (error.response) {

@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/userSlice";
-import { socket } from "./../socket";
+import { socket, ensureSocketConnected } from "./../socket";
 import {
   fetchChats,
   setChats,
@@ -58,6 +58,9 @@ export default function Sidebar() {
     const handleConnect = () => {
       socket.emit("add-user", userId);
     };
+
+    ensureSocketConnected();
+
     if (socket.connected) {
       handleConnect();
     }
