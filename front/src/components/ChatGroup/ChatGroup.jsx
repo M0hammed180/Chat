@@ -14,7 +14,7 @@ import {
   setMembersRedux,
   setSearch,
 } from "../../Redux/chatSlice";
-import { dataSDisplay, DateDisplay, TimeDisplay } from "../DateDisplay";
+import { dataSDisplay, DateDisplay, TimeDisplay } from "../dateDisplay";
 import BackButton from "../Elements/BackButton";
 import Loading from "../Elements/Loading";
 import api from "../../api";
