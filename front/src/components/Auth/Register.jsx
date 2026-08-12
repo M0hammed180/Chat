@@ -55,7 +55,7 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        "https://chat-production-7ac6.up.railway.app/user/register",
+        "https://chat-production-67d2.up.railway.app/user/register",
         formData,
         {
           headers: {

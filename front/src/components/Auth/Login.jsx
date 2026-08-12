@@ -27,7 +27,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post("https://chat-production-7ac6.up.railway.app/user/login", {
+      const response = await axios.post("https://chat-production-67d2.up.railway.app/user/login", {
         email: email,
         password: password,
       });
