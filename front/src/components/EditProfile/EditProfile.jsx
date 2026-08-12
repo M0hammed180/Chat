@@ -57,7 +57,6 @@ export default function EditProfile() {
     try {
       const response = await api.patch("/user/edit", formData);
 
-      console.log("Success:", response.data);
 
       let state = {
         _id: response.data.user._id,

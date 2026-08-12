@@ -74,7 +74,6 @@ export default function Profile() {
       });
       dispatch(fetchChats(userId));
       navigate("/");
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }

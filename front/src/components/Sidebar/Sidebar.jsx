@@ -20,7 +20,9 @@ import { getAvatarSrc } from "../../utils/avatarHelper";
 export default function Sidebar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userName, avatar, userId } = useSelector((state) => state.user);
+  const { userName, avatar, userId, isAuthenticated } = useSelector(
+    (state) => state.user,
+  );
   const user = useSelector((state) => state.user);
   const { chatsLoading, chatsError } = useSelector((state) => state.chat);
   const [open, setOpen] = useState(false);
@@ -31,6 +33,11 @@ export default function Sidebar() {
   const [loading, setLoading] = useState(true);
   const [fromLocal, setFromLocal] = useState(true);
   const { chatId } = useSelector((state) => state.chat);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated]);
   //update_Chat_List
   useEffect(() => {
     socket.on("update_chat_list", (data) => {
@@ -111,7 +118,6 @@ export default function Sidebar() {
       return usernameMatch || nameMatch || phoneMatch;
     });
     if (localMatches.length > 0) {
-      console.log(localMatches);
       setResults(localMatches);
       setLoading(false);
       return;

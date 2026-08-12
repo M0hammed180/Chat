@@ -45,6 +45,11 @@ export default function Chat() {
   const [menu, setMenu] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+    useEffect(() => {
+      if (!isAuthenticated) {
+        navigate("/login");
+      }
+    }, [isAuthenticated]);
   //Refresh Chats
   useEffect(() => {
     dispatch(fetchChats(userId));

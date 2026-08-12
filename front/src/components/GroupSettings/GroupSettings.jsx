@@ -143,14 +143,12 @@ export default function GroupSettings() {
     setLoading(true);
     // Add creator + selected members
     const membersIds = members.map((member) => member._id);
-    console.log(membersIds, chatId);
 
     try {
       const response = await api.post("/chats/addusertogroup", {
         members: membersIds,
         groupId: chatIdLocal,
       });
-      console.log(response.data);
       dispatch(setMembersRedux(response.data.members || []));
       setMenu(false);
       setMembers([]);
@@ -167,7 +165,6 @@ export default function GroupSettings() {
         userId: userDId,
         groupId: chatIdLocal,
       });
-      console.log(response.data);
       dispatch(setMembersRedux(response.data.members || []));
     } catch (error) {
       console.error(error.response?.data || error.message);
@@ -200,7 +197,6 @@ export default function GroupSettings() {
 
     try {
       const response = await api.post("/chats/editgroup", formData);
-      console.log(response.data);
       dispatch(setGroupData(response.data || {}));
       setMenu2(false);
     } catch (error) {
@@ -223,7 +219,6 @@ export default function GroupSettings() {
         userId,
         chatId: chatIdLocal,
       });
-      console.log(response.data);
       dispatch(fetchChats(userId));
       navigate("/");
     } catch (error) {

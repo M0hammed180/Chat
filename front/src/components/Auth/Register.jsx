@@ -64,7 +64,6 @@ export default function Register() {
         },
       );
 
-      console.log("Success:", response.data.message);
       navigate("/login");
     } catch (error) {
       if (error.response) {

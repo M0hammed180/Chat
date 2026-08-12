@@ -17,7 +17,6 @@ export default function Login() {
   }, [isAuthenticated]);
   const [errorMessage, setErrorMessage] = useState("");
   const { userName } = useSelector((state) => state.user);
-  console.log(userName);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +25,6 @@ export default function Login() {
     e.preventDefault();
     setErrorMessage("");
     setLoading(true);
-    console.log(email, password);
 
     try {
       const response = await axios.post("http://localhost:3000/user/login", {
@@ -34,7 +32,6 @@ export default function Login() {
         password: password,
       });
 
-      console.log("Success:", response.data.message);
       localStorage.setItem("token", response.data.token);
       dispatch(setUserData(response.data.userData));
       navigate("/");
