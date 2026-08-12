@@ -13,7 +13,7 @@ import {
   setUnReadMessages,
   setUserState,
 } from "../../Redux/chatSlice";
-import { dataSDisplay, DateDisplay, TimeDisplay } from "../DateDisplay";
+import { dataSDisplay, DateDisplay, TimeDisplay } from "../dateDisplay";
 import Loading from "../Elements/Loading";
 import api from "../../api";
 import { getAvatarSrc } from "../../utils/avatarHelper";
