@@ -35,7 +35,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Server is running",
+  });
+});
 app.use("/user", userRoutes);
 app.use("/chats", chatsRoutes);
 
@@ -74,7 +79,9 @@ io.on("connection", (socket) => {
   // Message events
   socket.on("send_message", (data) => messages.sendMessage(socket, io, data));
   socket.on("edit_message", (data) => messages.editMessage(socket, io, data));
-  socket.on("delete_message", (data) => messages.deleteMessage(socket, io, data));
+  socket.on("delete_message", (data) =>
+    messages.deleteMessage(socket, io, data),
+  );
   socket.on("read-messages", (data) => messages.readMessage(socket, io, data));
 
   // Chat events
@@ -84,6 +91,6 @@ io.on("connection", (socket) => {
 
 // 3. تعديل الـ PORT وتوفير بورت بديل للاختبار المحلي
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is listening on port ${PORT}`);
 });
