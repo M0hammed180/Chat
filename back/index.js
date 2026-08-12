@@ -20,7 +20,8 @@ mongoose
 
 // Express App Setup
 const app = express();
-const allowedOrigin = "https://chat-six-mu-81.vercel.app";
+const allowedOrigin =
+  "https://chat-81x7pwj4v-m0hammed180s-projects.vercel.app";
 
 app.use(
   cors({
