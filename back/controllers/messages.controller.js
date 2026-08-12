@@ -87,7 +87,7 @@ const readMessage = async (socket, io, data) => {
       },
     );
 
-    io.to(chatId).emit("messages-read", { chatId, user });
+    socket.to(chatId).emit("messages-read", { chatId, user });
   } catch (error) {
     console.error("Error in readMessage:", error);
   }

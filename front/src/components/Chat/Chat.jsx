@@ -126,7 +126,7 @@ export default function Chat() {
           chatId: id,
           user: {
             _id: userId,
-            avatar,
+            avatar: "",
           },
         });
       } catch (error) {
@@ -147,20 +147,22 @@ export default function Chat() {
   //handel - messageRead
   useEffect(() => {
     const handleMessagesRead = (data) => {
-      if (String(data.chatId) !== String(id) || !userId) return;
+      if (String(data.chatId) !== String(id)) return;
 
       setMessages((prev) =>
         prev.map((msg) => {
-          const msgSenderId =
+          const senderId =
             typeof msg.senderId === "string" ? msg.senderId : msg.senderId?._id;
 
-          if (String(msgSenderId) !== String(userId)) {
+          if (String(senderId) !== String(userId)) {
             return msg;
           }
 
-          const alreadySeen = msg.seenBy?.some(
-            (user) => String(user?._id || user) === String(data.user._id),
-          );
+          const alreadySeen = msg.seenBy?.some((seen) => {
+            const seenId = typeof seen === "string" ? seen : seen?._id;
+
+            return String(seenId) === String(data.user._id);
+          });
 
           if (alreadySeen) {
             return msg;
@@ -168,7 +170,7 @@ export default function Chat() {
 
           return {
             ...msg,
-            seenBy: [...(msg.seenBy || []), data.user],
+            seenBy: [...(msg.seenBy || []), data.user._id],
           };
         }),
       );
@@ -205,11 +207,14 @@ export default function Chat() {
   useEffect(() => {
     const handleReceive = (data) => {
       setMessages((prev) => [...prev, data]);
+
+      if (String(data.senderId._id) === String(userId)) {
+        return;
+      }
       socket.emit("read-messages", {
         chatId: id,
         user: {
           _id: userId,
-          avatar,
         },
       });
       dispatch(setLastMessage(id, data));
@@ -446,7 +451,7 @@ export default function Chat() {
                     : m.senderId?.name || "Unknown";
                 const isOwnMessage = senderId === userId;
                 const isSeen = m.seenBy?.some(
-                  (seenUser) => seenUser._id === reciveId,
+                  (seenUser) => seenUser === reciveId,
                 );
                 const edit = () => {
                   socket.emit("edit_message", {

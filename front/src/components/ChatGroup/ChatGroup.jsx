@@ -22,13 +22,17 @@ import { getAvatarSrc } from "../../utils/avatarHelper";
 
 export default function ChatGroup() {
   const { id } = useParams();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const typingTimeout = useRef(null);
   const lastMessageRef = useRef(null);
   const longPressTimer = useRef(null);
+
   const { userId, userName, avatar } = useSelector((state) => state.user);
   const { chats, search } = useSelector((state) => state.chat);
+
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [members, setMembers] = useState([]);
@@ -121,6 +125,13 @@ export default function ChatGroup() {
               avatar: user.avatar || "",
             })),
         );
+        socket.emit("read-messages", {
+          chatId: id,
+          user: {
+            _id: userId,
+            avatar,
+          },
+        });
       } catch (error) {
         console.error("Error fetching chats:", error);
       } finally {
@@ -129,19 +140,12 @@ export default function ChatGroup() {
     };
 
     fetchChat();
-  }, [userId, id]);
+  }, [userId, id, avatar]);
   //join chat and read message
   useEffect(() => {
     if (!id || !userId) return;
     socket.emit("join_chat", id);
-    socket.emit("read-messages", {
-      chatId: id,
-      user: {
-        _id: userId,
-        avatar,
-      },
-    });
-  }, [id, userId, avatar]);
+  }, [id, userId]);
   //handleMessagesRead
   useEffect(() => {
     const handleMessagesRead = (data) => {
@@ -204,6 +208,9 @@ export default function ChatGroup() {
   useEffect(() => {
     const handleReceive = (data) => {
       setMessages((prev) => [...prev, data]);
+      if (String(data.senderId._id) === String(userId)) {
+        return;
+      }
       socket.emit("read-messages", {
         chatId: id,
         user: {
@@ -582,14 +589,17 @@ export default function ChatGroup() {
                       {isOwnMessage && (
                         <span className=" flex pl-3 py-1">
                           {seenCount > 0
-                            ? m.seenBy.map((e) => (
-                                <img
-                                  key={e._id}
-                                  src={getAvatarSrc(e.avatar, false)}
-                                  alt=""
-                                  className="w-3 h-3 rounded-full object-cover -ml-1"
-                                />
-                              ))
+                            ? m.seenBy.map((e) => {
+                                if (e._id === userId) return;
+                                return (
+                                  <img
+                                    key={e._id}
+                                    src={getAvatarSrc(e.avatar, false)}
+                                    alt=""
+                                    className="w-3 h-3 rounded-full object-cover -ml-1"
+                                  />
+                                );
+                              })
                             : "sent"}
                         </span>
                       )}
