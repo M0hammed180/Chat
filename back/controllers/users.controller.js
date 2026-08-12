@@ -11,10 +11,6 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const register = asyncWrapper(async (req, res) => {
   const { name, username, phone, email, password, bio } = req.body;
 
-  // let pathPhoto = "";
-  // if (req.files && req.files["photo"]) {
-  //   pathPhoto = req.files["photo"][0].path.replace(/\\/g, "/");
-  // }
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await users.create({
@@ -157,12 +153,6 @@ const connected = async (socket, io, userId) => {
   chatsList.forEach((chat) => {
     socket.to(chat._id.toString()).emit("usersOnline", user);
   });
-  console.log(
-    "USER:",
-    userId,
-    "GROUPS:",
-    chatsList.map((chat) => chat._id.toString()),
-  );
   io.emit("user-online", userId);
 };
 

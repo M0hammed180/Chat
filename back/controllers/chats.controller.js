@@ -121,7 +121,6 @@ const makeGroup = asyncWrapper(async (req, res) => {
 
 const addUserToGroup = asyncWrapper(async (req, res) => {
   let { members, groupId } = req.body;
-  console.log({ members, groupId });
   if (!Array.isArray(members)) {
     members = [members];
   }
@@ -254,7 +253,6 @@ const showGroup = asyncWrapper(async (req, res) => {
 
 const deletChat = asyncWrapper(async (req, res) => {
   const { userId, chatId } = req.body;
-  console.log(userId, chatId);
 
   const chat = await chats.findOneAndUpdate(
     {
