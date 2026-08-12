@@ -31,6 +31,7 @@ export default function Chat() {
 
   const typingTimeout = useRef(null);
   const lastMessageRef = useRef(null);
+  const longPressTimer = useRef(null);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -45,11 +46,11 @@ export default function Chat() {
   const [menu, setMenu] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(() => {
-      if (!isAuthenticated) {
-        navigate("/login");
-      }
-    }, [isAuthenticated]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated]);
   //Refresh Chats
   useEffect(() => {
     dispatch(fetchChats(userId));
@@ -69,6 +70,30 @@ export default function Chat() {
       y: e.clientY,
       message,
     });
+  };
+  //longpress
+  const handleLongPressStart = (e, msg) => {
+    const msgSenderId =
+      typeof msg.senderId === "string" ? msg.senderId : msg.senderId?._id;
+
+    if (msgSenderId !== userId) return;
+
+    longPressTimer.current = setTimeout(() => {
+      const touch = e.touches[0];
+
+      setMenu({
+        x: touch.clientX,
+        y: touch.clientY,
+        message: msg,
+      });
+    }, 600);
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
   };
   //menu
   useEffect(() => {
@@ -97,6 +122,13 @@ export default function Chat() {
         setReciveId(response.data.receiverData?._id || "");
         dispatch(setBlock(response.data.block));
         setMessages(response.data.chatMessages || []);
+        socket.emit("read-messages", {
+          chatId: id,
+          user: {
+            _id: userId,
+            avatar,
+          },
+        });
       } catch (error) {
         console.error("Error fetching chats:", error);
       } finally {
@@ -106,37 +138,28 @@ export default function Chat() {
 
     fetchChat();
   }, [userId, id]);
-  // join - readMessage Loop
+  // join
   useEffect(() => {
     if (!id || !userId) return;
+
     socket.emit("join_chat", id);
-    const sendReadStatus = () => {
-      socket.emit("read-messages", {
-        chatId: id,
-        user: {
-          _id: userId,
-          avatar,
-        },
-      });
-    };
-    sendReadStatus();
   }, [id, userId]);
   //handel - messageRead
   useEffect(() => {
     const handleMessagesRead = (data) => {
-      if (data.chatId !== id || !userId) return;
+      if (String(data.chatId) !== String(id) || !userId) return;
 
       setMessages((prev) =>
         prev.map((msg) => {
           const msgSenderId =
             typeof msg.senderId === "string" ? msg.senderId : msg.senderId?._id;
 
-          if (msgSenderId !== userId) {
+          if (String(msgSenderId) !== String(userId)) {
             return msg;
           }
 
           const alreadySeen = msg.seenBy?.some(
-            (user) => user._id === data.user._id,
+            (user) => String(user?._id || user) === String(data.user._id),
           );
 
           if (alreadySeen) {
@@ -464,6 +487,14 @@ export default function Chat() {
                         onContextMenu={(e) =>
                           isOwnMessage && handleRightClick(e, m)
                         }
+                        onTouchStart={(e) => {
+                          if (isOwnMessage) {
+                            handleLongPressStart(e, m);
+                          }
+                        }}
+                        onTouchEnd={handleLongPressEnd}
+                        onTouchMove={handleLongPressEnd}
+                        onTouchCancel={handleLongPressEnd}
                         className={`${isOwnMessage ? "bg-white/90 text-slate-900 px-3 py-2 rounded-2xl max-w-[80%] dark:bg-white/10 dark:text-white" : "bg-blue-500 px-3 py-2 rounded-2xl max-w-[80%] text-white"} flex justify-between items-end`}
                       >
                         {isOwnMessage ? (

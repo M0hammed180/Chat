@@ -21,8 +21,14 @@ import api from "../../api";
 import { getAvatarSrc } from "../../utils/avatarHelper";
 
 export default function ChatGroup() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const typingTimeout = useRef(null);
+  const lastMessageRef = useRef(null);
+  const longPressTimer = useRef(null);
   const { userId, userName, avatar } = useSelector((state) => state.user);
+  const { chats, search } = useSelector((state) => state.chat);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [members, setMembers] = useState([]);
@@ -31,14 +37,9 @@ export default function ChatGroup() {
   const [chatG, setChatG] = useState({});
   const [typing, setTyping] = useState(false);
   const [typingUsers, setTypingUsers] = useState([]);
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { chats, search } = useSelector((state) => state.chat);
-  const typingTimeout = useRef(null);
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [newText, setNewText] = useState("");
   const [menu, setMenu] = useState(null);
-  const lastMessageRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState("");
   //refresh chat
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function ChatGroup() {
       behavior: "smooth",
     });
   }, [messages]);
-  //menu
+  //handel right click
   const handleRightClick = (e, message) => {
     e.preventDefault();
 
@@ -60,6 +61,31 @@ export default function ChatGroup() {
       message,
     });
   };
+  //longpress
+  const handleLongPressStart = (e, msg) => {
+    const msgSenderId =
+      typeof msg.senderId === "string" ? msg.senderId : msg.senderId?._id;
+
+    if (msgSenderId !== userId) return;
+
+    longPressTimer.current = setTimeout(() => {
+      const touch = e.touches[0];
+
+      setMenu({
+        x: touch.clientX,
+        y: touch.clientY,
+        message: msg,
+      });
+    }, 600);
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+  //menu
   useEffect(() => {
     const close = () => setMenu(null);
 
@@ -501,6 +527,14 @@ export default function ChatGroup() {
                           onContextMenu={(e) =>
                             isOwnMessage && handleRightClick(e, m)
                           }
+                          onTouchStart={(e) => {
+                            if (isOwnMessage) {
+                              handleLongPressStart(e, m);
+                            }
+                          }}
+                          onTouchEnd={handleLongPressEnd}
+                          onTouchMove={handleLongPressEnd}
+                          onTouchCancel={handleLongPressEnd}
                           className={`${
                             isOwnMessage
                               ? "bg-white/90 text-slate-900 dark:bg-white/10 dark:text-white"
