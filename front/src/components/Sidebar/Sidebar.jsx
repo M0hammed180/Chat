@@ -38,11 +38,18 @@ export default function Sidebar() {
       navigate("/login");
     }
   }, [isAuthenticated]);
+  Notification.requestPermission();
   //update_Chat_List
   useEffect(() => {
     socket.on("update_chat_list", (data) => {
       dispatch(setLastMessage({ id: data.chatId, data }));
       dispatch(setUnReadMessages({ id: data.chatId }));
+      if (Notification.permission === "granted") {
+        new Notification(data.senderId.name, {
+          body: data.text,
+          icon: data.senderId.avatar,
+        });
+      }
     });
     return () => {
       socket.on("update_chat_list", (data) => {
@@ -264,7 +271,7 @@ export default function Sidebar() {
           </div>
           {/* search */}
           <input
-            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-sm placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
+            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-base placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

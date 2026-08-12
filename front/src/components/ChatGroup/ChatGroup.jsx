@@ -623,7 +623,7 @@ export default function ChatGroup() {
                   }
                 }}
                 placeholder="Type a message..."
-                className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
               />
 
               <button
