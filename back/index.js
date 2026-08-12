@@ -20,19 +20,17 @@ mongoose
 
 // Express App Setup
 const app = express();
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://chat-six-mu-81.vercel.app",
-  "https://chat-git-main-m0hammed180s-projects.vercel.app",
-  "https://chat-m71c50blp-m0hammed180s-projects.vercel.app",
-  "https://chat-4dx5u6s82-m0hammed180s-projects.vercel.app",
-];
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "https://chat-six-mu-81.vercel.app",
+//   "https://chat-git-main-m0hammed180s-projects.vercel.app",
+//   "https://chat-m71c50blp-m0hammed180s-projects.vercel.app",
+//   "https://chat-4dx5u6s82-m0hammed180s-projects.vercel.app",
+//   "https://chat-92l9urqd7-m0hammed180s-projects.vercel.app"
+// ];
 
 // 1. تمرير الروابط المسموحة للـ CORS الخاص بـ Express
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -57,9 +55,8 @@ const server = http.createServer(app);
 // 2. تمرير نفس الروابط للـ CORS الخاص بـ Socket.io
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
   },
 });
 
