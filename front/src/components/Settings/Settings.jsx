@@ -69,8 +69,11 @@ export default function Settings() {
         </div>
 
         {/* Settings */}
-        <div onClick={() => navigate("/edit")} className="mt-5 space-y-2">
-          <button className="w-full flex items-center justify-between bg-white/20 hover:bg-white/40 transition dark:bg-white/10 dark:hover:bg-white/15 rounded-2xl p-3">
+        <div className="mt-5 space-y-2">
+          <button
+            onClick={() => navigate("/edit")}
+            className="w-full flex items-center justify-between bg-white/20 hover:bg-white/40 transition dark:bg-white/10 dark:hover:bg-white/15 rounded-2xl p-3"
+          >
             <div className="flex items-center gap-3">
               <FiUser size={22} />
               <span>Account</span>
