@@ -38,7 +38,13 @@ export default function Sidebar() {
       navigate("/login");
     }
   }, [isAuthenticated]);
-  Notification.requestPermission();
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && "Notification" in window) {
+      Notification.requestPermission().catch(() => {});
+    }
+  }, []);
+
   //update_Chat_List
   useEffect(() => {
     socket.on("update_chat_list", (data) => {
