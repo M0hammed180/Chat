@@ -470,7 +470,7 @@ export default function ChatGroup() {
             )}
             {/* messages */}
             <div className="flex-1 overflow-y-auto bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-3 transition-colors duration-300">
-              <div className="space-y-3 md:text-base">
+              <div className="space-y-3 md:text-sm">
                 {messagesMatches.map((m, index) => {
                   const senderId =
                     typeof m.senderId === "string"
@@ -623,7 +623,7 @@ export default function ChatGroup() {
                   }
                 }}
                 placeholder="Type a message..."
-                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+                className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
               />
 
               <button

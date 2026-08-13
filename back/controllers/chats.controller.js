@@ -194,6 +194,34 @@ const EditGroup = asyncWrapper(async (req, res) => {
   return res.status(201).json(chat);
 });
 
+const DeleteGroup = asyncWrapper(async (req, res) => {
+  const { groupId, userId } = req.body;
+
+  const chat = await chats.findById(groupId);
+
+  if (!chat) {
+    return res.status(404).json({
+      status: false,
+      message: "Group not found",
+    });
+  }
+
+  if (userId.toString() !== chat.admin.toString()) {
+    return res.status(401).json({
+      status: false,
+      message: "You are not admin",
+    });
+  }
+
+  await messages.deleteMany({ chatId: groupId });
+  await chats.findByIdAndDelete(groupId);
+  
+  return res.status(200).json({
+    status: true,
+    message: "Group Deleted",
+  });
+});
+
 const showChat = asyncWrapper(async (req, res) => {
   const { senderId, chatId } = req.body;
 
@@ -313,6 +341,7 @@ module.exports = {
   removeUserFromGroup,
   exitUserFromGroup,
   EditGroup,
+  DeleteGroup,
   block,
   unblock,
   deletChat,

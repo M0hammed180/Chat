@@ -271,7 +271,7 @@ export default function Sidebar() {
           </div>
           {/* search */}
           <input
-            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-base placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
+            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-sm placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -327,13 +327,15 @@ export default function Sidebar() {
                               />
 
                               <p>{e?.name.split(" ")[0]}</p>
-                              <div
-                                className={`w-2.5 h-2.5 rounded-full ${
-                                  e.state === "online"
-                                    ? "bg-green-500"
-                                    : "bg-gray-400"
-                                }`}
-                              />
+                              {!e.isGroup && (
+                                <div
+                                  className={`w-2.5 h-2.5 rounded-full ${
+                                    e.state === "online"
+                                      ? "bg-green-500"
+                                      : "bg-gray-400"
+                                  }`}
+                                />
+                              )}
                             </span>
                             {/* lastMessage */}
                             {e.lastMessage &&

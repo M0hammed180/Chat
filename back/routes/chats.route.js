@@ -10,6 +10,8 @@ router.get("/search", chats.search);
 
 router.delete("/delete", chats.deletChat);
 
+router.delete("/deletegroup", chats.DeleteGroup);
+
 router.get("/", verifyToken, chats.userChats);
 
 router.post("/", chats.makeChat);

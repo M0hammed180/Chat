@@ -37,7 +37,11 @@ export default function GroupSettings() {
   const chatIdLocal = JSON.parse(localStorage.getItem("chatIdLocal"));
   const [menu, setMenu] = useState(false);
   const [menu2, setMenu2] = useState(false);
+  const [menu3, setMenu3] = useState(false);
+  const [menu4, setMenu4] = useState(false);
+  const [menu5, setMenu5] = useState(false);
   const [name, setName] = useState(groupDatalocal.name);
+  const [memberInfo, setMemberInfo] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -159,13 +163,14 @@ export default function GroupSettings() {
     }
   };
 
-  const deleteUser = async (userDId) => {
+  const deleteUser = async () => {
     try {
       const response = await api.post("/chats/removeUserFromGroup", {
-        userId: userDId,
+        userId: memberInfo.id,
         groupId: chatIdLocal,
       });
       dispatch(setMembersRedux(response.data.members || []));
+      setMenu4(false);
     } catch (error) {
       console.error(error.response?.data || error.message);
     } finally {
@@ -219,6 +224,7 @@ export default function GroupSettings() {
         userId,
         chatId: chatIdLocal,
       });
+      setMenu5(false);
       dispatch(fetchChats(userId));
       navigate("/");
     } catch (error) {
@@ -228,6 +234,32 @@ export default function GroupSettings() {
     }
   };
   // =========================
+  //DeleteGroup
+  // =========================
+
+  const deleteGroup = async () => {
+    try {
+      const response = await api.delete(`/chats/deletegroup`, {
+        data: { userId, groupId: chatIdLocal },
+      });
+      dispatch(fetchChats(userId));
+      navigate("/");
+      setMenu3(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // =========================
+  //DeleteMemberGroup
+  // =========================
+
+  const deleteMember = async (nameM, memberId) => {
+    console.log({ name: nameM, id: memberId });
+    setMemberInfo({ name: nameM, id: memberId });
+    setMenu4(true);
+  };
+
+  // =========================
   // Loading
   // =========================
 
@@ -235,18 +267,11 @@ export default function GroupSettings() {
     return <Loading className="h-full w-full p-0 bg-transparent border-0" />;
   }
   return (
-    <div
-      onClick={() => {
-        setMenu(false);
-        setMenu2(false);
-      }}
-      className="h-screen  p-3 sm:p-4 text-slate-900 dark:text-white"
-    >
+    <div className="h-screen p-3 sm:p-4 text-slate-900 dark:text-white">
       {menu && (
         <div
           onClick={() => {
             setMenu(false);
-            setMenu2(false);
           }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
         >
@@ -387,7 +412,6 @@ export default function GroupSettings() {
       {menu2 && (
         <div
           onClick={() => {
-            setMenu(false);
             setMenu2(false);
           }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
@@ -481,6 +505,147 @@ export default function GroupSettings() {
           </div>
         </div>
       )}
+      {menu3 && (
+        <div
+          onClick={() => {
+            setMenu3(false);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/90"
+          >
+            {/* Header */}
+            <div className="border-b border-slate-200/70 p-5 dark:border-white/10">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Delete Group
+              </h2>
+
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Are you sure you want to delete this group?
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-3 p-5">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu(false);
+                  setMenu2(false);
+                  setMenu3(false);
+                }}
+                className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/10"
+              >
+                <FiX size={18} />
+                No
+              </button>
+
+              <button
+                type="button"
+                onClick={deleteGroup}
+                className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {menu4 && (
+        <div
+          onClick={() => {
+            setMenu4(false);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/90"
+          >
+            {/* Header */}
+            <div className="border-b border-slate-200/70 p-5 dark:border-white/10">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Delete Group
+              </h2>
+
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Are you sure you want to delete {memberInfo.name} from group?
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-3 p-5">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu4(false);
+                }}
+                className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/10"
+              >
+                <FiX size={18} />
+                No
+              </button>
+
+              <button
+                type="button"
+                onClick={deleteUser}
+                className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {menu5 && (
+        <div
+          onClick={() => {
+            setMenu5(false);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-black/90"
+          >
+            {/* Header */}
+            <div className="border-b border-slate-200/70 p-5 dark:border-white/10">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Delete Group
+              </h2>
+
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Are you sure you want to exit from group?
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-3 p-5">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenu5(false);
+                }}
+                className="flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/10"
+              >
+                <FiX size={18} />
+                No
+              </button>
+
+              <button
+                type="button"
+                onClick={exitGroup}
+                className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
+              >
+                Exite
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="relative h-full overflow-y-auto bg-white/20 dark:bg-black/20 border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300 backdrop-blur-md">
         <BackButton />
         <div className="flex flex-col items-center border-b border-slate-200/70 dark:border-white/10 pb-6">
@@ -508,8 +673,7 @@ export default function GroupSettings() {
           {groupDatalocal.admin == userId ? (
             <>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                onClick={() => {
                   setMenu(true);
                 }}
                 className="w-full flex items-center justify-between rounded-2xl bg-blue-600/20 px-3 py-3 text-blue-400 transition hover:bg-blue-600/30"
@@ -520,8 +684,7 @@ export default function GroupSettings() {
                 </div>
               </button>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                onClick={() => {
                   setMenu2(true);
                 }}
                 className="w-full flex items-center justify-between rounded-2xl bg-blue-600/20 px-3 py-3 text-blue-400 transition hover:bg-blue-600/30"
@@ -531,10 +694,23 @@ export default function GroupSettings() {
                   <span>Edit Group</span>
                 </div>
               </button>
+              <button
+                onClick={() => {
+                  setMenu3(true);
+                }}
+                className="w-full flex items-center justify-between rounded-2xl bg-red-600/20 px-3 py-3 text-red-400 transition hover:bg-red-600/30"
+              >
+                <div className="flex items-center gap-3">
+                  <FiTrash2 size={22} />
+                  <span>Delete Group</span>
+                </div>
+              </button>
             </>
           ) : (
             <button
-              onClick={exitGroup}
+              onClick={() => {
+                setMenu5(true);
+              }}
               className="w-full flex items-center justify-between rounded-2xl bg-red-600/20 px-3 py-3 text-red-400 transition hover:bg-red-600/30"
             >
               <div className="flex items-center gap-3">
@@ -576,16 +752,17 @@ export default function GroupSettings() {
                     />{" "}
                   </Link>
                   <div className="">
-                    {groupDatalocal.admin == userId && (
-                      <div className="flex justify-end items-center gap-3 ">
-                        <button
-                          onClick={() => deleteUser(e._id)}
-                          className="font-black cursor-pointer p-2 rounded-full bg-red-800/50 hover:bg-red-800 border border-red-950"
-                        >
-                          <FiX size={22} />
-                        </button>
-                      </div>
-                    )}
+                    {groupDatalocal.admin == userId &&
+                      groupDatalocal.admin !== e._id && (
+                        <div className="flex justify-end items-center gap-3 ">
+                          <button
+                            onClick={() => deleteMember(e.name, e._id)}
+                            className="font-black cursor-pointer p-2 rounded-full bg-red-800/50 hover:bg-red-800 border border-red-950"
+                          >
+                            <FiX size={22} />
+                          </button>
+                        </div>
+                      )}
                   </div>
                 </li>
               ))}
