@@ -331,7 +331,7 @@ export default function Chat() {
   //noChatSelected
   if (!id) {
     return (
-      <div className="h-screen w-full p-3 sm:p-4">
+      <div className="h-dvh w-full p-3 sm:p-4">
         <div className="relative h-full bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 overflow-y-auto transition-colors duration-300 flex justify-center items-center">
           <div className="absolute top-4 left-4">
             <BackButton />
@@ -345,7 +345,7 @@ export default function Chat() {
 
   return (
     <>
-      <div className="h-screen w-full p-3 sm:p-4 text-slate-900 dark:text-white">
+      <div className="h-dvh w-full p-3 sm:p-4 text-slate-900 dark:text-white">
         <div className="h-full flex flex-col gap-3">
           {/* header */}
           <div className="flex items-center justify-between bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-full p-3 transition-colors duration-300">
@@ -390,7 +390,7 @@ export default function Chat() {
                   setSearchTerm(e.target.value);
                 }}
                 placeholder="Search..."
-                className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2 "
+                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2 "
               />
 
               <button
@@ -565,7 +565,7 @@ export default function Chat() {
                   }
                 }}
                 placeholder="Type a message..."
-                className="flex-1 bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
               />
 
               <button

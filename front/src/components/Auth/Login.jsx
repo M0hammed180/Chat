@@ -54,12 +54,12 @@ export default function Login() {
     }
   };
   if (loading) {
-    return <Loading className="h-screen w-full p-0 bg-transparent border-0" />;
+    return <Loading className="h-dvh w-full p-0 bg-transparent border-0" />;
   }
 
   return (
     <div>
-      <div className="flex min-h-screen  px-4 py-10 bg-slate-50 dark:bg-slate-950 sm:px-6 lg:px-8">
+      <div className="flex min-h-dvh  px-4 py-10 bg-slate-50 dark:bg-slate-950 sm:px-6 lg:px-8">
         {/* Left Pane */}
         <div className="hidden lg:flex items-center justify-center flex-1  text-slate-700  dark:text-slate-100">
           <div className="max-w-md text-center">

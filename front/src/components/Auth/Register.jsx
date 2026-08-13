@@ -77,11 +77,11 @@ export default function Register() {
   };
 
   if (loading) {
-    return <Loading className="h-screen w-full p-0 bg-transparent border-0" />;
+    return <Loading className="h-dvh w-full p-0 bg-transparent border-0" />;
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white">
+    <div className="flex h-dvh bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white">
       <div className="w-full bg-slate-50 text-slate-900 lg:w-1/2 flex items-center justify-center dark:bg-slate-900 dark:text-white">
         <div className="max-w-md w-full p-6">
           <h1 className="text-3xl font-semibold mb-6 text-slate-900 dark:text-white text-center">

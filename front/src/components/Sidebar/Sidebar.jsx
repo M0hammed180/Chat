@@ -200,7 +200,7 @@ export default function Sidebar() {
     <>
       <div
         onClick={() => setOpen(false)}
-        className="flex fixed inset-0 z-50 h-screen w-full md:fixed md:left-0 md:top-0 md:h-screen md:w-[30%] flex-col justify-center items-center text-slate-900 dark:text-white rounded-3xl"
+        className="flex fixed inset-0 z-50 h-dvh w-full md:fixed md:left-0 md:top-0 md:h-dvh md:w-[30%] flex-col justify-center items-center text-slate-900 dark:text-white rounded-3xl"
       >
         <div className="flex flex-col bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md w-full h-full md:w-[95%] md:h-[97%] rounded-none md:rounded-4xl p-3 sm:p-4 border-0 md:border-2 border-slate-200/70 dark:border-white/10 space-y-3">
           {/* header */}
@@ -277,7 +277,7 @@ export default function Sidebar() {
           </div>
           {/* search */}
           <input
-            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-sm placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
+            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-base placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

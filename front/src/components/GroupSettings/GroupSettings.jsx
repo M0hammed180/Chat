@@ -267,7 +267,7 @@ export default function GroupSettings() {
     return <Loading className="h-full w-full p-0 bg-transparent border-0" />;
   }
   return (
-    <div className="h-screen p-3 sm:p-4 text-slate-900 dark:text-white">
+    <div className="h-dvh p-3 sm:p-4 text-slate-900 dark:text-white">
       {menu && (
         <div
           onClick={() => {

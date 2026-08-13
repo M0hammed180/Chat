@@ -88,7 +88,7 @@ export default function EditProfile() {
   }
 
   return (
-    <div className="h-screen w-full p-3 sm:p-4 text-slate-900 dark:text-white ">
+    <div className="h-dvh w-full p-3 sm:p-4 text-slate-900 dark:text-white ">
       <div className="relative h-full overflow-y-auto bg-white/20 dark:bg-black/20 border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300 backdrop-blur-md flex justify-center">
         <div className=""></div>
         <BackButton />

@@ -44,7 +44,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="h-screen w-full p-3 sm:p-4">
+    <div className="h-dvh w-full p-3 sm:p-4">
       <div className="relative h-full bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 overflow-y-auto transition-colors duration-300">
         <BackButton />
         {/* Profile */}
