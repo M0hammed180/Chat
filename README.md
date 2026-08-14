@@ -91,10 +91,6 @@ Private chats support real-time messaging, message status, typing indicators, an
 
 Groups allow users to manage members, update group information, add or remove members, and leave groups.
 
-## Screenshots
-
-Screenshots of the application will be added here.
-
 ### Chat
 
 ![Chat Screenshot](./screenshots/chat.png)
