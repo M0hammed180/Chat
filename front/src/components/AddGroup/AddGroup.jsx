@@ -174,7 +174,7 @@ export default function AddGroup() {
 
   return (
     <div className="flex justify-center items-center w-full h-full p-3 sm:p-4">
-      <div className="flex justify-around items-center w-full overflow-y-auto flex-1 h-11/12 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300">
+      <div className=" flex justify-around items-center w-full overflow-y-auto flex-1 h-11/12 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300">
         {/* Back Button */}
 
         <button
@@ -187,7 +187,7 @@ export default function AddGroup() {
 
         {/* Form */}
 
-        <div className="lg:w-1/2 flex items-center justify-center h-full w-full">
+        <div className=" flex items-center justify-center h-full w-full">
           <div className="max-w-md w-full p-4">
             <h1 className="text-2xl font-semibold mb-4 text-slate-900 dark:text-white text-center">
               Make Group
@@ -198,29 +198,22 @@ export default function AddGroup() {
 
               <div className="flex flex-col items-center gap-3">
                 <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-300 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white">
-                  {preview ? (
+                  <label htmlFor="avatar" className="cursor-pointer">
                     <img
-                      src={preview}
+                      src={getAvatarSrc(preview, true)}
                       alt="Avatar Preview"
                       className="h-full w-full object-cover"
                     />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-sm bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white">
-                      No Image
-                    </div>
-                  )}
+                  </label>
                 </div>
-
-                <label className="cursor-pointer rounded-lg px-3 py-1.5 text-sm transition">
-                  Choose Avatar
-                  <input
-                    type="file"
-                    name="photo"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
+                <input
+                  id="avatar"
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
               </div>
 
               {/* Group Name */}

@@ -19,6 +19,7 @@ import BackButton from "../Elements/BackButton";
 import Loading from "../Elements/Loading";
 import api from "../../api";
 import { getAvatarSrc } from "../../utils/avatarHelper";
+import { FiEdit, FiSend } from "react-icons/fi";
 
 export default function ChatGroup() {
   const { id } = useParams();
@@ -384,7 +385,7 @@ export default function ChatGroup() {
                           {onlineUsers.map((e) => (
                             <div
                               key={e._id}
-                              className="flex relative w-7 h-7 justify-center items-center m-1 mr-2 -ml-4 rounded-full "
+                              className="flex relative w-6 h-6 md:w-7 md:h-7 justify-center items-center m-1 mr-2 -ml-4 rounded-full "
                             >
                               <img
                                 className="w-7 h-7 rounded-full object-cover mr-2"
@@ -419,7 +420,7 @@ export default function ChatGroup() {
                     setSearchTerm(e.target.value);
                   }}
                   placeholder="Search..."
-                  className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2 "
+                  className="flex-1 bg-transparent outline-none md:text-sm text-[16px] text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2 "
                 />
 
                 <button
@@ -500,7 +501,7 @@ export default function ChatGroup() {
                       }
                     >
                       {/* Date */}
-                      <div className="w-full text-2xl font- text-center">
+                      <div className="w-full md:text-2xl text-lg text-center">
                         {index > 0
                           ? Number(
                               DateDisplay(messagesMatches[index - 1].createdAt),
@@ -525,7 +526,7 @@ export default function ChatGroup() {
                           <Link to={`/profile/${senderId}`}>
                             <img
                               src={getAvatarSrc(senderAvatar, false)}
-                              className="w-12 h-12 rounded-full object-cover m-2"
+                              className="w-7 h-7 md:w-12 md:h-12 rounded-full object-cover m-2"
                               alt=""
                             />
                           </Link>
@@ -544,8 +545,8 @@ export default function ChatGroup() {
                           onTouchCancel={handleLongPressEnd}
                           className={`${
                             isOwnMessage
-                              ? "bg-white/90 text-slate-900 dark:bg-white/10 dark:text-white"
-                              : "bg-blue-500 text-white"
+                              ? "bg-blue-500 text-white"
+                              : "bg-white/90 text-slate-900 dark:bg-white/10 dark:text-white"
                           } px-4 py-2 rounded-2xl max-w-xs flex justify-between items-end`}
                         >
                           <div
@@ -553,41 +554,24 @@ export default function ChatGroup() {
                               isOwnMessage ? "items-start" : "items-end"
                             } flex flex-col`}
                           >
-                            <span className="text-xs font-light">
+                            <span className="text-xs md:text-[13px] font-light">
                               {isOwnMessage ? "" : senderName}
                             </span>
-
+                            <span className="md:text-xs text-[9px]">
+                              {m.edited && "    Edited"}
+                            </span>
                             <span>
-                              {editingMessageId === m._id ? (
-                                <input
-                                  autoFocus
-                                  value={newText}
-                                  onChange={(e) => setNewText(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                      socket.emit("edit_message", {
-                                        messageId: m._id,
-                                        senderId: userId,
-                                        text: newText,
-                                      });
-
-                                      setEditingMessageId(null);
-                                    }
-                                  }}
-                                />
-                              ) : (
-                                m.text
-                              )}
+                              {editingMessageId === m._id ? newText : m.text}
                             </span>
 
-                            <span className="text-xs font-light">
+                            <span className="text-[8px] md:text-xs font-light">
                               <span>{TimeDisplay(m.createdAt)}</span>
                             </span>
                           </div>
                         </div>
                       </div>
                       {isOwnMessage && (
-                        <span className=" flex pl-3 py-1">
+                        <span className=" flex pl-3 py-1 text-xs">
                           {seenCount > 0
                             ? m.seenBy.map((e) => {
                                 if (e._id === userId) return;
@@ -609,30 +593,64 @@ export default function ChatGroup() {
               </div>
             </div>
             {/* input */}
-            <div className="flex items-center gap-2 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-2 transition-colors duration-300">
-              <input
-                type="text"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                  socketTyping();
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    sendMessage();
-                  }
-                }}
-                placeholder="Type a message..."
-                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
-              />
+            {editingMessageId ? (
+              <div className="flex items-center gap-2 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-2 transition-colors duration-300">
+                <input
+                  autoFocus
+                  type="text"
+                  value={newText}
+                  onChange={(e) => setNewText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      sendMessage();
+                    }
+                  }}
+                  className="flex-1 bg-transparent outline-none md:text-sm text-[16px] text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+                />
+                <button
+                  onClick={() => {
+                    console.log(editingMessageId);
 
-              <button
-                onClick={sendMessage}
-                className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-sm text-white transition"
-              >
-                Send
-              </button>
-            </div>
+                    socket.emit("edit_message", {
+                      messageId: editingMessageId,
+                      senderId: userId,
+                      text: newText,
+                    });
+
+                    setEditingMessageId(null);
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-sm text-white transition"
+                >
+                  <FiEdit size={18} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-2 transition-colors duration-300">
+                <input
+                  autoFocus
+                  type="text"
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    socketTyping();
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      sendMessage();
+                    }
+                  }}
+                  placeholder="Type a message..."
+                  className="flex-1 bg-transparent outline-none md:text-sm text-[16px] text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+                />
+
+                <button
+                  onClick={sendMessage}
+                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-sm text-white transition"
+                >
+                  <FiSend size={18} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : (

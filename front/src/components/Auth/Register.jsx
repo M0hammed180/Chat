@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Loading from "../Elements/Loading";
+import { getAvatarSrc } from "../../utils/avatarHelper";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -81,149 +82,149 @@ export default function Register() {
   }
 
   return (
-    <div className="flex h-dvh bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white">
-      <div className="w-full bg-slate-50 text-slate-900 lg:w-1/2 flex items-center justify-center dark:bg-slate-900 dark:text-white">
+    <div className="flex min-h-dvh  px-4 py-10  sm:px-6 lg:px-8">
+      <div className="relative  overflow-y-auto bg-white/20 dark:bg-black/20 border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300 backdrop-blur-md">
         <div className="max-w-md w-full p-6">
-          <h1 className="text-3xl font-semibold mb-6 text-slate-900 dark:text-white text-center">
+          <h1 className="text-3xl font-semibold mb-6 text-black dark:text-white text-center">
             Register
           </h1>
-          <h1 className="text-sm font-semibold mb-6 text-slate-500 dark:text-slate-400 text-center">
-            Join to Our Community with all time access and free
-          </h1>
-          <form onSubmit={handleAdd} className="space-y-4">
+          <form onSubmit={handleAdd} className="">
             {/* Your form elements go here */}
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex justify-center items-center gap-4">
               {/* Avatar Preview */}
               <div className="h-32 w-32 overflow-hidden rounded-full border-2 border-gray-300 bg-gray-100">
-                {preview ? (
+                <label htmlFor="avatar" className="cursor-pointer">
                   <img
-                    src={preview}
+                    src={getAvatarSrc(preview)}
                     alt="Avatar Preview"
                     className="h-full w-full object-cover"
                   />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
-                    No Image
-                  </div>
-                )}
+                </label>
               </div>
 
-              {/* File Input */}
+              {/* File Input
               <label className="cursor-pointer rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition hover:bg-blue-700">
                 Choose Avatar
-                <input
-                  type="file"
-                  name="avatar"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-              </label>
+                
+              </label> */}
             </div>
-
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                onChange={(e) => setName(e.target.value)}
-                name="name"
-                className="mt-1 p-2 w-full border rounded-md bg-white text-slate-900 focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:focus:ring-slate-600"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-              >
-                Username
-              </label>
-              <input
-                type="text"
-                id="username"
-                onChange={(e) => setUsername(e.target.value)}
-                name="username"
-                className="mt-1 p-2 w-full border rounded-md bg-white text-slate-900 focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:focus:ring-slate-600"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-              >
-                Phone
-              </label>
-              <input
-                type="text"
-                id="name"
-                onChange={(e) => setPhone(e.target.value)}
-                name="phone"
-                className="mt-1 p-2 w-full border rounded-md bg-white text-slate-900 focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:focus:ring-slate-600"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-              >
-                Email
-              </label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md bg-white text-slate-900 focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:focus:ring-slate-600"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
-                className="mt-1 p-2 w-full border rounded-md bg-white text-slate-900 focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:focus:ring-slate-600"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="bio"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300"
-              >
-                Bio
-              </label>
-              <input
-                type="text"
-                id="bio"
-                onChange={(e) => setBio(e.target.value)}
-                name="bio"
-                className="mt-1 p-2 w-full border rounded-md bg-white text-slate-900 focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:focus:ring-slate-600"
-              />
+            <input
+              id="avatar"
+              type="file"
+              name="avatar"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+            <div className="flex md:py-5 py-3 space-x-3">
+              <div className="space-y-3">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-800 dark:text-slate-300"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    onChange={(e) => setName(e.target.value)}
+                    name="name"
+                    className="mt-1 p-2 w-full border rounded-xl text-[16px] bg-white text-black focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-black dark:text-white dark:border-gray-800 dark:focus:ring-black"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="username"
+                    className="block text-sm font-medium text-gray-800 dark:text-slate-300"
+                  >
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    id="username"
+                    onChange={(e) => setUsername(e.target.value)}
+                    name="username"
+                    className="mt-1 p-2 w-full border rounded-xl text-[16px] bg-white text-black focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-black dark:text-white dark:border-gray-800 dark:focus:ring-black"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-800 dark:text-slate-300"
+                  >
+                    Phone
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    onChange={(e) => setPhone(e.target.value)}
+                    name="phone"
+                    className="mt-1 p-2 w-full border rounded-xl text-[16px] bg-white text-black focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-black dark:text-white dark:border-gray-800 dark:focus:ring-black"
+                  />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-800 dark:text-slate-300"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-1 p-2 w-full border rounded-xl text-[16px] bg-white text-black focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-black dark:text-white dark:border-gray-800 dark:focus:ring-black"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-800 dark:text-slate-300"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    className="mt-1 p-2 w-full border rounded-xl text-[16px] bg-white text-black focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-black dark:text-white dark:border-gray-800 dark:focus:ring-black"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="bio"
+                    className="block text-sm font-medium text-gray-800 dark:text-slate-300"
+                  >
+                    Bio
+                  </label>
+                  <input
+                    type="text"
+                    id="bio"
+                    onChange={(e) => setBio(e.target.value)}
+                    name="bio"
+                    className="mt-1 p-2 w-full border rounded-xl text-[16px] bg-white text-black focus:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-colors duration-300 dark:bg-black dark:text-white dark:border-gray-800 dark:focus:ring-black"
+                  />
+                </div>
+              </div>
             </div>
             <div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white p-2 rounded-md text-sm hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300 dark:bg-white dark:text-black dark:hover:bg-slate-200 dark:focus:ring-white disabled:opacity-60"
+                className="w-full bg-black text-white p-2 rounded-lg text-sm hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300 dark:bg-white dark:text-black dark:hover:bg-slate-200 dark:focus:ring-white disabled:opacity-60"
               >
                 {loading ? "Signing up..." : "Sign Up"}
               </button>
             </div>
           </form>
-          <div className="mt-4 text-sm text-slate-600 dark:text-slate-400 text-center">
+          <div className="mt-4 text-sm text-black dark:text-slate-400 text-center">
             <p>
-              Already have an account?
+              Already have an account?{" "}
               <Link
                 to="/login"
                 className="text-black hover:underline dark:text-white"
@@ -236,7 +237,7 @@ export default function Register() {
       </div>
 
       {/* Right Pane */}
-      <div className="hidden lg:flex items-center justify-center flex-1 bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
+      <div className="hidden lg:flex items-center justify-center flex-1  text-black  dark:text-white">
         <div className="max-w-md text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"

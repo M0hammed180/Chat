@@ -449,29 +449,23 @@ export default function GroupSettings() {
               {/* Avatar */}
               <div className="flex flex-col items-center gap-3">
                 <div className="h-28 w-28 overflow-hidden rounded-full border-2 border-slate-300 bg-white/30 dark:border-slate-700 dark:bg-black/20">
-                  {preview ? (
+                  <label htmlFor="avatar" className="cursor-pointer">
                     <img
-                      src={preview}
+                      src={getAvatarSrc(preview, true)}
                       alt="Avatar Preview"
                       className="h-full w-full object-cover"
                     />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-sm text-slate-500">
-                      No Image
-                    </div>
-                  )}
+                  </label>
                 </div>
 
-                <label className="cursor-pointer rounded-xl bg-slate-200 px-4 py-2 text-sm font-medium transition hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700">
-                  Choose Avatar
-                  <input
-                    type="file"
-                    name="photo"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
+                <input
+                  id="avatar"
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
               </div>
 
               {/* Group Name */}
@@ -613,7 +607,7 @@ export default function GroupSettings() {
             {/* Header */}
             <div className="border-b border-slate-200/70 p-5 dark:border-white/10">
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                Delete Group
+                Exit Group
               </h2>
 
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">

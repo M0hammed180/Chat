@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Loading from "../Elements/Loading";
 import { socket, ensureSocketConnected } from "../socket";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("token");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -37,9 +39,12 @@ export default function Login() {
       );
 
       localStorage.setItem("token", response.data.token);
-      dispatch(setUserData(response.data.userData));
+
+      const decoded = jwtDecode(response.data.token);
+      dispatch(setUserData(decoded));
       ensureSocketConnected();
-      socket.emit("add-user", response.data.userData._id);
+      socket.emit("add-user", decoded._id);
+
       navigate("/");
     } catch (error) {
       if (error.response) {
@@ -59,9 +64,9 @@ export default function Login() {
 
   return (
     <div>
-      <div className="flex min-h-dvh  px-4 py-10 bg-slate-50 dark:bg-slate-950 sm:px-6 lg:px-8">
+      <div className="flex min-h-dvh  px-4 py-10  sm:px-6 lg:px-8">
         {/* Left Pane */}
-        <div className="hidden lg:flex items-center justify-center flex-1  text-slate-700  dark:text-slate-100">
+        <div className="hidden lg:flex items-center justify-center flex-1  text-black  dark:text-slate-100">
           <div className="max-w-md text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -319,8 +324,8 @@ export default function Login() {
         </div>
         {/* Right Pane */}
         <div className="w-full lg:w-1/2 flex items-center justify-center">
-          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-slate-900">
-            <h1 className="mb-4 text-center text-2xl font-semibold text-slate-800 dark:text-slate-100">
+          <div className="relative  overflow-y-auto bg-white/20 dark:bg-black/20 border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300 backdrop-blur-md ">
+            <h1 className="mb-4 text-center text-2xl font-semibold text-black dark:text-slate-100">
               Login
             </h1>
             <h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
@@ -345,7 +350,7 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   id="email"
                   name="email"
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full border rounded-xl text-[16px] focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
@@ -360,7 +365,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   name="password"
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full border rounded-xl text-[16px] focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
@@ -375,7 +380,10 @@ export default function Login() {
             <div className="mt-4 text-sm text-gray-600 text-center">
               <p>
                 Dont have an account?{" "}
-                <Link to="/register" className="text-black hover:underline">
+                <Link
+                  to="/register"
+                  className="dark:text-white text-black hover:underline"
+                >
                   Signup Here
                 </Link>
               </p>

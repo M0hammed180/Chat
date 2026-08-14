@@ -191,6 +191,7 @@ export default function Sidebar() {
   //logout
   const logOut = () => {
     socket.disconnect();
+    localStorage.removeItem("token");
     setTimeout(() => {
       dispatch(logout());
       navigate("/login");
@@ -277,7 +278,7 @@ export default function Sidebar() {
           </div>
           {/* search */}
           <input
-            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 text-base placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
+            className="w-full rounded-3xl bg-white/20 text-slate-900 outline-none p-3 md:text-sm text-[16px] placeholder:text-slate-500 dark:bg-white/10 dark:text-white dark:placeholder:text-slate-400"
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

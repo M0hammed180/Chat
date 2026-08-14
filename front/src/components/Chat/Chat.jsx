@@ -17,6 +17,7 @@ import BackButton from "../Elements/BackButton";
 import Loading from "../Elements/Loading";
 import api from "../../api";
 import { getAvatarSrc } from "../../utils/avatarHelper";
+import { FiEdit, FiSend, FiX } from "react-icons/fi";
 export default function Chat() {
   const { id } = useParams();
 
@@ -345,8 +346,8 @@ export default function Chat() {
 
   return (
     <>
-      <div className="h-dvh w-full p-3 sm:p-4 text-slate-900 dark:text-white">
-        <div className="h-full flex flex-col gap-3">
+      <div className="h-dvh w-full box-border overflow-hidden p-3 sm:p-4 text-slate-900 dark:text-white">
+        <div className="h-full min-h-0 flex flex-col gap-3">
           {/* header */}
           <div className="flex items-center justify-between bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-full p-3 transition-colors duration-300">
             <BackButton />
@@ -362,10 +363,16 @@ export default function Chat() {
                 <h2 className="font-semibold text-sm">{receiverData.name}</h2>
                 <span>|</span>
                 <p
-                  className={`text-xs ${chat[0]?.state === "online" ? `text-green-400` : `text-red-400`} `}
+                  className={`text-xs ${
+                    typingUsers.length > 0
+                      ? "text-green-400"
+                      : chat[0]?.state === "online"
+                        ? "text-green-400"
+                        : "text-red-400"
+                  }`}
                 >
-                  {typing
-                    ? "Typing"
+                  {typingUsers.length > 0
+                    ? "Typing..."
                     : chat[0]?.state === "online"
                       ? "Online"
                       : "Offline"}
@@ -390,7 +397,7 @@ export default function Chat() {
                   setSearchTerm(e.target.value);
                 }}
                 placeholder="Search..."
-                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2 "
+                className="flex-1 bg-transparent outline-none md:text-sm text-[16px] text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2 "
               />
 
               <button
@@ -440,7 +447,7 @@ export default function Chat() {
             </div>
           )}
           {/* messages */}
-          <div className="flex-1 overflow-y-auto bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-3 transition-colors duration-300">
+          <div className="flex-1 min-h-0  overflow-y-auto bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-3 transition-colors duration-300">
             <div className="space-y-3 md:text-base">
               {messagesMatches.map((m, index) => {
                 const senderId =
@@ -471,7 +478,7 @@ export default function Chat() {
                         : null
                     }
                   >
-                    <div className="w-full text-2xl py-2 text-center">
+                    <div className="w-full md:text-2xl text-lg py-2 text-center">
                       {index > 0
                         ? Number(
                             DateDisplay(messagesMatches[index - 1].createdAt),
@@ -500,45 +507,30 @@ export default function Chat() {
                         onTouchEnd={handleLongPressEnd}
                         onTouchMove={handleLongPressEnd}
                         onTouchCancel={handleLongPressEnd}
-                        className={`${isOwnMessage ? "bg-white/90 text-slate-900 px-3 py-2 rounded-2xl max-w-[80%] dark:bg-white/10 dark:text-white" : "bg-blue-500 px-3 py-2 rounded-2xl max-w-[80%] text-white"} flex justify-between items-end`}
+                        className={`${isOwnMessage ? "bg-blue-500 px-3 py-2 rounded-2xl max-w-[80%] text-white" : "bg-white/90 text-slate-900 px-3 py-2 rounded-2xl max-w-[80%] dark:bg-white/10 dark:text-white"} flex justify-between items-end`}
                       >
                         {isOwnMessage ? (
                           isSeen ? (
-                            <span className="text-xs font-light pr-2">✓✓</span>
+                            <span className="text-[7px] md:text-sm font-black pr-2">
+                              ✓✓
+                            </span>
                           ) : (
-                            <span className="text-xs font-light pr-2">✓</span>
+                            <span className="text-[7px] md:text-sm font-black pr-2">
+                              ✓
+                            </span>
                           )
                         ) : (
                           ""
                         )}
 
                         <div className="flex flex-col">
-                          <span className="text-xs">
+                          <span className="md:text-xs text-[9px]">
                             {m.edited && "    Edited"}
                           </span>
                           <span>
-                            {editingMessageId === m._id ? (
-                              <input
-                                autoFocus
-                                value={newText}
-                                onChange={(e) => setNewText(e.target.value)}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    socket.emit("edit_message", {
-                                      messageId: m._id,
-                                      senderId: userId,
-                                      text: newText,
-                                    });
-
-                                    setEditingMessageId(null);
-                                  }
-                                }}
-                              />
-                            ) : (
-                              m.text
-                            )}
+                            {editingMessageId === m._id ? newText : m.text}
                           </span>
-                          <span className="text-xs font-light">
+                          <span className="md:text-xs text-[8px] font-light">
                             {TimeDisplay(m.createdAt)}
                           </span>
                         </div>
@@ -550,9 +542,41 @@ export default function Chat() {
             </div>
           </div>
           {/* input */}
-          {!block.isBlock && (
+          {!block.isBlock && (editingMessageId ? (
             <div className="flex items-center gap-2 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-2 transition-colors duration-300">
               <input
+                autoFocus
+                type="text"
+                value={newText}
+                onChange={(e) => setNewText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    sendMessage();
+                  }
+                }}
+                className="flex-1 bg-transparent outline-none md:text-sm text-[16px] text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+              />
+              <button
+                onClick={() => {
+                  console.log(editingMessageId);
+
+                  socket.emit("edit_message", {
+                    messageId: editingMessageId,
+                    senderId: userId,
+                    text: newText,
+                  });
+
+                  setEditingMessageId(null);
+                }}
+                className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-sm text-white transition"
+              >
+                <FiEdit size={18} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 bg-white/20 text-slate-900 dark:bg-black/20 dark:text-white backdrop-blur-md border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-2 transition-colors duration-300">
+              <input
+                autoFocus
                 type="text"
                 value={message}
                 onChange={(e) => {
@@ -565,17 +589,17 @@ export default function Chat() {
                   }
                 }}
                 placeholder="Type a message..."
-                className="flex-1 bg-transparent outline-none text-base text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
+                className="flex-1 bg-transparent outline-none md:text-sm text-[16px] text-slate-900 placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-300 px-2"
               />
 
               <button
                 onClick={sendMessage}
                 className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full text-sm text-white transition"
               >
-                Send
+                <FiSend size={18} />
               </button>
             </div>
-          )}
+          ))}
         </div>
       </div>
     </>

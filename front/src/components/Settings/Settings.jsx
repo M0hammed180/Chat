@@ -37,6 +37,7 @@ export default function Settings() {
   //logout
   const logOut = () => {
     socket.disconnect();
+    localStorage.removeItem("token");
     setTimeout(() => {
       dispatch(logout());
       navigate("/login");

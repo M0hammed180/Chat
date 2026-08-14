@@ -7,6 +7,7 @@ import BackButton from "../Elements/BackButton";
 import Loading from "../Elements/Loading";
 import api from "../../api";
 import { setUserData } from "../../Redux/userSlice";
+import { getAvatarSrc } from "../../utils/avatarHelper";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -57,7 +58,6 @@ export default function EditProfile() {
     try {
       const response = await api.patch("/user/edit", formData);
 
-
       let state = {
         _id: response.data.user._id,
         name: response.data.user.name,
@@ -90,8 +90,11 @@ export default function EditProfile() {
   return (
     <div className="h-dvh w-full p-3 sm:p-4 text-slate-900 dark:text-white ">
       <div className="relative h-full overflow-y-auto bg-white/20 dark:bg-black/20 border-2 border-slate-200/70 dark:border-white/10 rounded-3xl p-4 transition-colors duration-300 backdrop-blur-md flex justify-center">
-        <div className=""></div>
-        <BackButton />
+        <div className="fixed top-2 left-2">
+          {" "}
+          <BackButton />
+        </div>
+
         <div className="max-w-md w-full p-6">
           <h1 className="text-3xl font-semibold mb-6 text-slate-900 dark:text-white text-center">
             Edit Profile
@@ -101,31 +104,26 @@ export default function EditProfile() {
             <div className="flex flex-col items-center gap-4">
               {/* Avatar Preview */}
               <div className="h-32 w-32 overflow-hidden rounded-full border-2 border-gray-300 bg-gray-100">
-                {preview ? (
-                  <img
-                    src={preview}
-                    value={avatar}
-                    alt="Avatar Preview"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-sm text-gray-400">
-                    No Image
-                  </div>
-                )}
-              </div>
 
               {/* File Input */}
-              <label className="cursor-pointer rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white transition hover:bg-blue-700">
-                Choose Avatar
-                <input
-                  type="file"
-                  name="avatar"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
+              <label htmlFor="avatar" className="cursor-pointer">
+                <img
+                  src={getAvatarSrc(preview)}
+                  alt="Avatar Preview"
+                  className="h-full w-full object-cover"
                 />
               </label>
+              </div>
+
+
+              <input
+                id="avatar"
+                type="file"
+                name="avatar"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
             </div>
 
             <div>
