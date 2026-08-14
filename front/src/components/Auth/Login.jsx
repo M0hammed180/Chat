@@ -62,6 +62,12 @@ export default function Login() {
     return <Loading className="h-dvh w-full p-0 bg-transparent border-0" />;
   }
 
+  const LoginAsDemo = () => {
+    setEmail("demo");
+    setPassword("demo");
+    handleLogin();
+  };
+
   return (
     <div>
       <div className="flex min-h-dvh  px-4 py-10  sm:px-6 lg:px-8">
@@ -374,6 +380,12 @@ export default function Login() {
                   className="w-full rounded-2xl bg-cyan-600 p-2.5 text-sm font-semibold text-white transition hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
                 >
                   login
+                </button>
+                <button
+                  onClick={LoginAsDemo}
+                  className="w-full rounded-2xl mt-2 bg-cyan-600 p-2.5 text-sm font-semibold text-white transition hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                >
+                  login as demo
                 </button>
               </div>
             </form>
